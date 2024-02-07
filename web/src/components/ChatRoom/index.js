@@ -30,6 +30,17 @@ function ChatRoom({ socket, userName, room }) {
     }
   };
 
+  const sendActvity = () =>{
+    socket.emit('activity', {
+      name: userName,
+      room,
+    });
+  }
+
+  const handleInputChange = () => {
+    sendActvity()
+  }
+
   const renderName = (name) => {
     if (name === userName) {
       return 'You';
@@ -63,7 +74,10 @@ function ChatRoom({ socket, userName, room }) {
         )}
       />
 
-      <MessageInput sendMessage={sendMessage} />
+      <MessageInput 
+        sendMessage={sendMessage} 
+        onChange={handleInputChange}
+      />
     </div>
   );
 }

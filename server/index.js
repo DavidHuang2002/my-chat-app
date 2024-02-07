@@ -42,6 +42,11 @@ io.on("connection", (socket) => {
         onUserListChange(socket, io, room)
     })
 
+    socket.on("activity", ({name, room} ) => {
+        console.log(`Received activity from ${name} in room ${room}`)
+        socket.broadcast.to(room).emit("activity", { name })
+    })
+
     // TODO extract a common message interface to be used for both front and back end
     socket.on("message", ({ text }) => {
         const user = getUser(socket.id)

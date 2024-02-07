@@ -1,11 +1,15 @@
 // Input box for chat messages
 
 import React, { useState } from 'react'
-import { Button, Input, Select, Space } from 'antd';
+import { Button, Input, Space } from 'antd';
 
-const MessageInput = ({ sendMessage }) => {
+const MessageInput = ({ sendMessage, onChange }) => {
 
     const [message, setMessage] = useState('')
+    const handleChange = (e) => {
+        onChange()
+        setMessage(e.target.value)
+    }
     
 
     const handleSend = () => {
@@ -18,7 +22,7 @@ const MessageInput = ({ sendMessage }) => {
         <Space.Compact style={{ width: '100%' }}>
             <Input 
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={handleChange}
                 defaultValue="Combine input and button" 
                 onPressEnter={handleSend}
             />

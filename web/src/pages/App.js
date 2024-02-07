@@ -4,6 +4,7 @@ import { Layout  } from 'antd';
 import ChatRoom from '../components/ChatRoom';
 import JoinRoomModal from '../components/JoinRoomModal';
 import UserList from '../components/UserList';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 const { Content } = Layout;
 const socket = io('ws://localhost:3500');
@@ -13,6 +14,18 @@ function App() {
   const [userName, setUserName] = useState('');
   const [userList, setUserList] = useState([]);
   const [roomList, setRoomList] = useState([]);
+  const [activity, setActivity] = useState('');
+
+  
+
+
+  const setActivityTimeout = () => {
+    setTimeout(() => {
+      setActivity('');
+    }, 500);
+  }
+
+  
 
   useEffect(() => {
     socket.on("userList", ({users}) => {
@@ -26,6 +39,16 @@ function App() {
       // Handle received message
       setRoomList(rooms);
     });
+
+    let timeOut;
+    const activityCallback = ({name}) => {
+      console.log('activity received', name);
+      clearTimeout(timeOut);
+      const activity = `${name} is typing...`;
+      setActivity(activity);
+      timeOut = setActivityTimeout();
+    }
+    socket.on("activity", activityCallback);
 
     // unbind socket for cleanup
     return () => {
@@ -62,6 +85,7 @@ function App() {
         <UserList 
           users={userList} 
         />
+        <ActivityIndicator activity={activity} />
       </Content>
     </Layout>
   );
