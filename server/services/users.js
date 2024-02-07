@@ -3,6 +3,7 @@
 const currentUsers = []
 
 export const activateUser = (id, name, room ) => {
+    console.log('activateUser', id, name, room)
     const user = {
         id: id,
         name: name,
@@ -14,6 +15,7 @@ export const activateUser = (id, name, room ) => {
 
 
 export const deactivateUser = (id) => {
+    console.log('deactivateUser', id)
     const index = currentUsers.findIndex(user => user.id === id)
     if (index !== -1) {
         return currentUsers.splice(index, 1)[0]
