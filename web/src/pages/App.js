@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-import { Layout } from 'antd';
+import { Layout  } from 'antd';
 import ChatRoom from '../components/ChatRoom';
 import JoinRoomModal from '../components/JoinRoomModal';
+import UserList from '../components/UserList';
 
 const { Content } = Layout;
 const socket = io('ws://localhost:3500');
@@ -10,15 +11,19 @@ const socket = io('ws://localhost:3500');
 function App() {
   const [currentRoom, setCurrentRoom] = useState('');
   const [userName, setUserName] = useState('');
+  const [userList, setUserList] = useState([]);
 
   useEffect(() => {
-    socket.on("message", (message) => {
+    socket.on("userList", ({users}) => {
+      console.log("userList", users);
       // Handle received message
+      setUserList(users);
     });
 
     // unbind socket for cleanup
     return () => {
       socket.off("message");
+      socket.off("userList");
     };
   }, []);
 
@@ -34,10 +39,16 @@ function App() {
   const [JoinRoomModalOpen, setJoinRoomModalOpen] = useState(true);
 
   return (
-    <Layout style={{height: "100vh"}}>
-      <Content style={{ padding: '20px', width: '600px', margin: '0 auto' }}>
+    <Layout>
+      <Content 
+        style={{ 
+          height: '100vh',
+          padding: '20px', width: '600px', margin: '0 auto', marginTop: '50px',
+        }}
+      >
         <JoinRoomModal open={JoinRoomModalOpen} onJoin={handleRoomJoin} onCancel={() => {}} />
         <ChatRoom socket={socket} userName={userName} room={currentRoom} />
+        <UserList users={userList} />
       </Content>
     </Layout>
   );

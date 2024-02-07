@@ -25,3 +25,11 @@ export const deactivateUser = (id) => {
 export const getUser = (id) => {
     return currentUsers.find(user => user.id === id)
 }
+
+export const getUsersInRoom = (room) => {
+    return currentUsers.filter(user => user.room === room)
+}
+
+export const getAllActiveRooms = () => {
+    return Array.from(new Set(currentUsers.map(user => user.room)))
+}

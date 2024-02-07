@@ -8,8 +8,7 @@ const JoinRoomModal = ({open, onJoin, onCancel}) => {
 
 
   return (
-    <>
-        <Modal
+      <Modal
         title="Join a room"
         open={open}
         onCancel={onCancel}
@@ -20,7 +19,6 @@ const JoinRoomModal = ({open, onJoin, onCancel}) => {
             onJoin={onJoin}
         />
       </Modal>
-    </>
   );
 };
 

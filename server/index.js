@@ -1,7 +1,8 @@
 import express from 'express'
 import { Server } from "socket.io"
 import { activateUser, deactivateUser, getUser } from './services/users.js'
-
+import { makeMessage } from './services/messages.js'
+import { onUserListChange } from './socket/eventHandlers.js'
 
 const PORT = process.env.PORT || 3500
 const ADMIN = "Admin"
@@ -26,22 +27,27 @@ io.on("connection", (socket) => {
     socket.on("joinRoom", ({ name, room }) => {
         socket.join(room)
         socket.emit("message", { user: ADMIN, text: `${name}, welcome to room ${room}` })
-        socket.broadcast.to(room).emit("message", { user: ADMIN, text: `${name} has joined!` })
+        socket.broadcast.to(room).emit("message", { name: ADMIN, text: `${name} has joined!` })
 
         activateUser(socket.id, name, room)
+        onUserListChange(socket, io, room)
     })
 
-    socket.on("message", ({ message }) => {
+    // TODO extract a common message interface to be used for both front and back end
+    socket.on("message", ({ text }) => {
         const user = getUser(socket.id)
         const { name, room } = user
-        console.log(`Received message from ${name} in room ${room}: ${message}`)
+        console.log(`Received message from ${name} in room ${room}: ${text}`)
         // TODO add time stamp to message
-        io.to(room).emit("message", { name, text: message })
+        io.to(room).emit("message", makeMessage(name, text))
     })
 
     socket.on("disconnect", () => {
         console.log(`User disconnected: ${socket.id}`)
-        deactivateUser(socket.id)
+        const user = deactivateUser(socket.id)
+        if (user) {
+            onUserListChange(socket, io, user.room)
+        }
     })
 })
 
