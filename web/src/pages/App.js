@@ -34,9 +34,8 @@ function App() {
   const [JoinRoomModalOpen, setJoinRoomModalOpen] = useState(true);
 
   return (
-    <Layout>
-      <Content style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-        {/* <JoinRoomForm onJoin={handleRoomJoin} /> */}
+    <Layout style={{height: "100vh"}}>
+      <Content style={{ padding: '20px', width: '600px', margin: '0 auto' }}>
         <JoinRoomModal open={JoinRoomModalOpen} onJoin={handleRoomJoin} onCancel={() => {}} />
         <ChatRoom socket={socket} userName={userName} room={currentRoom} />
       </Content>

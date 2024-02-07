@@ -3,20 +3,28 @@
 import React, { useState } from 'react'
 import { Button, Input, Select, Space } from 'antd';
 
-const MessageInput = ({ sendMessage: onSendMessage }) => {
+const MessageInput = ({ sendMessage }) => {
 
     const [message, setMessage] = useState('')
     
 
     const handleSend = () => {
-        onSendMessage(message)
+        sendMessage(message)
         setMessage('')
     }
+    
 
     return (
         <Space.Compact style={{ width: '100%' }}>
-            <Input defaultValue="Combine input and button" />
-            <Button type="primary">Submit</Button>
+            <Input 
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                defaultValue="Combine input and button" 
+                onPressEnter={handleSend}
+            />
+            <Button type="primary" onClick={handleSend}>
+                Send
+            </Button>
         </Space.Compact>
     )
 }

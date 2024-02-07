@@ -25,5 +25,3 @@ export const deactivateUser = (id) => {
 export const getUser = (id) => {
     return currentUsers.find(user => user.id === id)
 }
-
-export default currentUsers

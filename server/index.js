@@ -1,6 +1,6 @@
 import express from 'express'
 import { Server } from "socket.io"
-import { activateUser, deactivateUser } from './services/users.js'
+import { activateUser, deactivateUser, getUser } from './services/users.js'
 
 
 const PORT = process.env.PORT || 3500
@@ -34,9 +34,9 @@ io.on("connection", (socket) => {
     socket.on("message", ({ message }) => {
         const user = getUser(socket.id)
         const { name, room } = user
-
+        console.log(`Received message from ${name} in room ${room}: ${message}`)
         // TODO add time stamp to message
-        io.to(room).emit("message", { user: name, text: message })
+        io.to(room).emit("message", { name, text: message })
     })
 
     socket.on("disconnect", () => {

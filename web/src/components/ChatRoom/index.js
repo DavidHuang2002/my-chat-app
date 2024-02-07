@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Input, Button, List, Form } from 'antd';
+import { List } from 'antd';
+import MessageInput from './MessageInput';
 
-const { TextArea } = Input;
 
 function ChatRoom({ socket, userName, room }) {
-  const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
 
-  const sendMessage = (e) => {
+  const sendMessage = (message) => {
     if (message) {
       socket.emit('message', {
         name: userName,
-        text: message,
+        message,
         room,
       });
-      setMessage('');
     }
   };
 
@@ -29,7 +27,7 @@ function ChatRoom({ socket, userName, room }) {
   }, [socket]);
 
   return (
-    <div>
+    <div style={{width: "100%"}}>
       <List
         className="chat-display"
         itemLayout="horizontal"
@@ -48,14 +46,8 @@ function ChatRoom({ socket, userName, room }) {
           </List.Item>
         )}
       />
-      <Form className="chat-form" onFinish={sendMessage}>
-        <Form.Item>
-          <TextArea rows={2} onChange={(e) => setMessage(e.target.value)} value={message} placeholder="Type a message" />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">Send</Button>
-        </Form.Item>
-      </Form>
+
+      <MessageInput sendMessage={sendMessage} />
     </div>
   );
 }
