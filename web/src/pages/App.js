@@ -71,7 +71,7 @@ function App() {
     <Layout>
       <Content 
         style={{ 
-          height: '100vh',
+          minHeight: '100vh',
           padding: '20px', width: '600px', margin: '0 auto', marginTop: '50px',
         }}
       >
