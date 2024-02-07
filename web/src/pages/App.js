@@ -12,6 +12,7 @@ function App() {
   const [currentRoom, setCurrentRoom] = useState('');
   const [userName, setUserName] = useState('');
   const [userList, setUserList] = useState([]);
+  const [roomList, setRoomList] = useState([]);
 
   useEffect(() => {
     socket.on("userList", ({users}) => {
@@ -20,9 +21,14 @@ function App() {
       setUserList(users);
     });
 
+    socket.on("roomList", ({rooms}) => {
+      console.log("roomList", rooms);
+      // Handle received message
+      setRoomList(rooms);
+    });
+
     // unbind socket for cleanup
     return () => {
-      socket.off("message");
       socket.off("userList");
     };
   }, []);
@@ -46,9 +52,16 @@ function App() {
           padding: '20px', width: '600px', margin: '0 auto', marginTop: '50px',
         }}
       >
-        <JoinRoomModal open={JoinRoomModalOpen} onJoin={handleRoomJoin} onCancel={() => {}} />
+        <JoinRoomModal 
+          open={JoinRoomModalOpen} 
+          onJoin={handleRoomJoin} 
+          onCancel={() => {}} 
+          rooms={roomList}
+        />
         <ChatRoom socket={socket} userName={userName} room={currentRoom} />
-        <UserList users={userList} />
+        <UserList 
+          users={userList} 
+        />
       </Content>
     </Layout>
   );

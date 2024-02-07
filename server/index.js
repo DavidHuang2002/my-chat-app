@@ -1,6 +1,6 @@
 import express from 'express'
 import { Server } from "socket.io"
-import { activateUser, deactivateUser, getUser } from './services/users.js'
+import { activateUser, deactivateUser, getUser, getAllActiveRooms } from './services/users.js'
 import { makeMessage } from './services/messages.js'
 import { onUserListChange } from './socket/eventHandlers.js'
 
@@ -20,8 +20,17 @@ const io = new Server(server, {
     }
 })
 
+// TODO make it into APIs
+const sendRooms = (socket) => {
+    socket.emit("roomList", {
+        rooms: getAllActiveRooms()
+    })
+}
+
 io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`)
+    
+    sendRooms(socket)
 
     // TODO extract messaging logic into one place
     socket.on("joinRoom", ({ name, room }) => {
@@ -46,7 +55,9 @@ io.on("connection", (socket) => {
         console.log(`User disconnected: ${socket.id}`)
         const user = deactivateUser(socket.id)
         if (user) {
-            onUserListChange(socket, io, user.room)
+            const { name, room } = user
+            io.to(room).emit("message", { user: ADMIN, text: `${name} has left room ${room}` })
+            onUserListChange(socket, io, room)
         }
     })
 })
