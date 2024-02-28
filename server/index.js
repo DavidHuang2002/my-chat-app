@@ -9,8 +9,12 @@ const ADMIN = "Admin"
 
 const app = express()
 
+app.get('/home', (req, res) => {
+  res.status(200).json('Welcome, your app is working well');
+})
+
 const server = app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+    console.log(`Server running`)
 })
 
 
@@ -72,3 +76,6 @@ io.on("connection", (socket) => {
     })
 })
 
+
+// Export the Express API
+export default app
