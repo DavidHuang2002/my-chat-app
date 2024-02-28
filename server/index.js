@@ -22,6 +22,9 @@ const server = app.listen(PORT, () => {
 const localOrigins = ["http://localhost:3000", "http://127.0.0.1:3000", "http://10.76.234.9:3000"];
 const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : localOrigins;
 
+console.log(process.env.ALLOWED_ORIGINS)
+console.log(allowedOrigins)
+
 const io = new Server(server, {
     cors: {
         // TODO add env var for production and dev

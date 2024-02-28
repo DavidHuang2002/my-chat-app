@@ -8,10 +8,12 @@ import ActivityIndicator from '../components/ActivityIndicator';
 
 const { Content } = Layout;
 
-const SERVER_URL = process.env.SERVER_URL || 'ws://localhost:3500';
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || 'ws://localhost:3500';
 const socket = io(SERVER_URL);
 
 function App() {
+  console.log(process.env)
+  console.log('SERVER_URL', SERVER_URL);
   const [currentRoom, setCurrentRoom] = useState('');
   const [userName, setUserName] = useState('');
   const [userList, setUserList] = useState([]);
