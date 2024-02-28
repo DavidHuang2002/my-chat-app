@@ -12,7 +12,7 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL || 'ws://localhost:3500';
 const socket = io(SERVER_URL);
 
 function App() {
-  console.log("env variables?")
+  console.log("env variables")
   console.log(process.env)
   console.log('SERVER_URL', SERVER_URL);
   const [currentRoom, setCurrentRoom] = useState('');
