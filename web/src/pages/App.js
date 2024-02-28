@@ -7,7 +7,9 @@ import UserList from '../components/UserList';
 import ActivityIndicator from '../components/ActivityIndicator';
 
 const { Content } = Layout;
-const socket = io('ws://localhost:3500');
+
+const SERVER_URL = process.env.SERVER_URL || 'ws://localhost:3500';
+const socket = io(SERVER_URL);
 
 function App() {
   const [currentRoom, setCurrentRoom] = useState('');
