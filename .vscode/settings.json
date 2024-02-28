@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/1933b92b-b7e3-4d0d-9c00-a8aba8ae251c/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/david-chat-app-server",
+    "appService.deploySubpath": "server"
+}
